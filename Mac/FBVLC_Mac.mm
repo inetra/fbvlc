@@ -10,6 +10,9 @@ FBVLC_Mac::FBVLC_Mac()
 
 FBVLC_Mac::~FBVLC_Mac()
 {
+    if (m_layer) {
+        
+    }
 }
 
 void FBVLC_Mac::updateBgComponents()
@@ -111,4 +114,14 @@ void FBVLC_Mac::update_window()
     if ( w ) {
         w->InvalidateWindow();
     }
+}
+
+// This is for CoreAnimation ?
+
+bool FBVLC_Mac::onWindowAttached(FB::AttachedEvent* evt, FB::PluginWindowMac* wnd) {
+    
+}
+
+bool FBVLC_Mac::onWindowDetached(FB::DetachedEvent* evt, FB::PluginWindowMac* wnd) {
+    
 }

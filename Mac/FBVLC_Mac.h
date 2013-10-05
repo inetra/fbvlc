@@ -6,6 +6,7 @@
 #include "PluginEvents/MacEventCocoa.h"
 #include "Mac/PluginWindowMac.h"
 #include "Mac/PluginWindowMacCG.h"
+#include "Mac/PluginWindowMacCA.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 //FBVLC_Mac class
@@ -22,6 +23,8 @@ public:
 
     BEGIN_PLUGIN_EVENT_MAP()
         EVENTTYPE_CASE(FB::CoreGraphicsDraw, onCoreGraphicsDraw, FB::PluginWindowMacCG)
+        EVENTTYPE_CASE(FB::AttachedEvent, onWindowAttached, FB::PluginWindowMac)
+        EVENTTYPE_CASE(FB::DetachedEvent, onWindowDetached, FB::PluginWindowMac)
         PLUGIN_EVENT_MAP_CASCADE(FBVLC)
     END_PLUGIN_EVENT_MAP()
 
@@ -30,6 +33,8 @@ private:
     bool onCoreGraphicsDraw(FB::CoreGraphicsDraw *evt, FB::PluginWindowMacCG*);
     /** END EVENTDEF -- DON'T CHANGE THIS LINE **/
 
+    virtual bool onWindowAttached(FB::AttachedEvent *evt, FB::PluginWindowMac*);
+    virtual bool onWindowDetached(FB::DetachedEvent *evt, FB::PluginWindowMac*);
 
     void update_window();
 public:
@@ -47,6 +52,7 @@ private:
 
 private:
     CGFloat m_bgComponents[4];
+    void *m_layer;
 };
 
 #endif//H_FBVLCPLUGIN_MAC

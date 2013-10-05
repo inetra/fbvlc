@@ -13,7 +13,7 @@ set(PLUGIN_VERSION "0.0.6")
 #if you want embed vlc into FBVLC distribution:
 # 1) place vlc into FBVLC\Win\WiX\vlc-${VLC_VERSION}
 # 2) uncomment following line
-set(VLC_VERSION "2.0.8")
+set(VLC_VERSION "2.1.1")
 # 3) run prepXXXX.cmd from FireBreath
 
 #unfortunately current implementation does not work :(
@@ -48,9 +48,9 @@ set(FBSTRING_PluginDescription "VLC Web Plugin (powered by FireBreath)")
 set(FBSTRING_PLUGIN_VERSION "${PLUGIN_VERSION}")
 set(FBSTRING_LegalCopyright "Copyright 2012 RSATom")
 set(FBSTRING_PluginFileName "np${PLUGIN_NAME}.dll")
-set(FBSTRING_ProductName "FireBreathed VLC")
+set(FBSTRING_ProductName "FireBreathedVLC")
 set(FBSTRING_FileExtents "")
-set(FBSTRING_PluginName "FireBreathed VLC")
+set(FBSTRING_PluginName "FireBreathedVLC")
 set(FBSTRING_MIMEType "application/x-fb-vlc")
 
 # Uncomment this next line if you're not planning on your plugin doing
@@ -63,7 +63,7 @@ set(FBMAC_USE_QUICKDRAW 0)
 set(FBMAC_USE_CARBON 0)
 set(FBMAC_USE_COCOA 1)
 set(FBMAC_USE_COREGRAPHICS 1)
-set(FBMAC_USE_COREANIMATION 0)
+set(FBMAC_USE_COREANIMATION 1)
 set(FBMAC_USE_INVALIDATINGCOREANIMATION 0)
 
 # If you want to register per-machine on Windows, uncomment this line
