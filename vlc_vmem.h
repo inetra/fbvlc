@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vlc_basic_player.h"
+#include <vector>
 
 namespace vlc
 {
