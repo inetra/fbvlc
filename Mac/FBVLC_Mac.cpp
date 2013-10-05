@@ -40,27 +40,40 @@ void FBVLC_Mac::on_option_change(vlc_player_option_e option)
 
 bool FBVLC_Mac::onCoreGraphicsDraw(FB::CoreGraphicsDraw *evt, FB::PluginWindowMacCG*)
 {
+    const std::vector<char>& fb = vlc::vmem::frame_buf();
+    const unsigned media_width = vlc::vmem::width(); //   720 | 448
+    const unsigned media_height = vlc::vmem::height(); // 304 | 336
+
     FB::Rect bounds(evt->bounds);
     //FB::Rect clip(evt->clip);
-    short width = bounds.right - bounds.left, height = bounds.bottom - bounds.top;
+    CGFloat width = bounds.right - bounds.left, height = bounds.bottom - bounds.top;
 
     CGContextRef cgContext(evt->context);
 
     CGContextSaveGState(cgContext);
 
-    CGContextTranslateCTM(cgContext, 0.0, height);
-    CGContextScaleCTM(cgContext, 1.0, -1.0);
+    CGFloat scale;
+    if (width/media_width < height/media_height) { // 1,94 < 2,96 | 4,60 < 2,67
+        // Horizontal
+        scale = width/media_width; //
+        CGContextTranslateCTM(cgContext, 0, height - (height - media_height*scale)/2);
+    } else {
+        // Vertical
+        scale = height/media_height;
+        CGContextTranslateCTM(cgContext, (width - media_width*scale)/2, height);
+    }
+    CGContextScaleCTM(cgContext, scale, -scale);
 
     CGColorSpaceRef cSpace = CGColorSpaceCreateDeviceRGB();
     CGContextSetFillColorSpace(cgContext, cSpace);
 
     CGColorRef bgColor = CGColorCreate(cSpace, m_bgComponents);
     CGContextSetFillColorWithColor(cgContext, bgColor);
+    CGRect cgBounds = {
+        { 0, 0 },
+        { media_width, media_height }
+    };
     
-    const std::vector<char>& fb = vlc::vmem::frame_buf();
-    const unsigned media_width = vlc::vmem::width();
-    const unsigned media_height = vlc::vmem::height();
-
     if ( fb.size() &&
         fb.size() >= media_width * media_height * vlc::DEF_PIXEL_BYTES )
     {
@@ -69,47 +82,11 @@ bool FBVLC_Mac::onCoreGraphicsDraw(FB::CoreGraphicsDraw *evt, FB::PluginWindowMa
                                   media_width * vlc::DEF_PIXEL_BYTES, cSpace, kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little);
         CGImageRef img = CGBitmapContextCreateImage(bmpCtx);
 
-        CGRect imgRect = {
-            { (width - media_width) / 2, (height - media_height) / 2 },
-            { media_width, media_height }
-        };
-        CGContextDrawImage(cgContext, imgRect, img);
+        CGContextDrawImage(cgContext, cgBounds, img);
 
         CGImageRelease(img);
         CGContextRelease(bmpCtx);
-
-        if( media_width < width ) {
-            CGRect bgLeft = {
-                { 0, 0 },
-                { imgRect.origin.x, height }
-            };
-            CGContextFillRect(cgContext, bgLeft);
-
-            CGRect bgRight = {
-                { imgRect.origin.x + imgRect.size.width, 0 },
-                { width - (imgRect.origin.x + imgRect.size.width), height }
-            };
-            CGContextFillRect(cgContext, bgRight);
-
-        } else if( media_height < height ){
-            CGRect bgTop = {
-                { 0, 0 },
-                { width, imgRect.origin.y }
-            };
-            CGContextFillRect(cgContext, bgTop);
-
-            CGRect bgBottom = {
-                { 0, imgRect.origin.y + imgRect.size.height },
-                { width, height - (imgRect.origin.y + imgRect.size.height) }
-            };
-            CGContextFillRect(cgContext, bgBottom);
-        }
-
     } else {
-        CGRect cgBounds = {
-            { 0, 0 },
-            { width, height }
-        };
         CGContextFillRect(cgContext, cgBounds);
     }
 
