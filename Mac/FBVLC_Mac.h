@@ -30,6 +30,8 @@ private:
     bool onCoreGraphicsDraw(FB::CoreGraphicsDraw *evt, FB::PluginWindowMacCG*);
     /** END EVENTDEF -- DON'T CHANGE THIS LINE **/
 
+
+    void update_window();
 public:
     virtual bool is_fullscreen() { return false; };
     virtual void set_fullscreen(bool fs) { };
@@ -37,6 +39,8 @@ public:
 
 protected:
     virtual void on_option_change(vlc_player_option_e );
+    virtual void on_frame_ready( const std::vector<char>& frame_buf );
+    virtual void on_frame_cleanup();
 
 private:
     void updateBgComponents();

@@ -12,6 +12,7 @@
 #include "PluginWindow.h"
 #include "PluginEvents/MouseEvents.h"
 #include "PluginEvents/AttachedEvent.h"
+#include "PluginEvents/DrawingEvents.h"
 
 #include "PluginCore.h"
 
@@ -85,8 +86,6 @@ public:
     virtual void toggle_fullscreen() = 0;
 
 private:
-    const FB::variant& getParamVariant( const std::string& key ) const;
-
     void init_vlc_player_options();
     void init_libvlc_options( std::vector<std::string>* );
     void process_startup_options();

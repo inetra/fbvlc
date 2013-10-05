@@ -173,16 +173,6 @@ void FBVLC::VlcEvents(bool Attach)
     }
 }
 
-const FB::variant& FBVLC::getParamVariant(const std::string& key) const
-{
-    FB::VariantMap::const_iterator fnd = m_params.find(key.c_str());
-    if (fnd != m_params.end())
-        return fnd->second;
-
-    static const FB::variant empty;
-    return empty;
-}
-
 void FBVLC::init_vlc_player_options()
 {
     typedef boost::optional<std::string> param_type;
